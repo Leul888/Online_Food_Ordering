@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gourmet Express - Food Delivery</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f9f9f9;
+        }
+        
+        .hero-section {
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .food-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .food-card {
+            transition: all 0.3s ease;
+        }
+        
+        .cart-item {
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .category-btn.active {
+            background-color: #ef4444;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header/Navigation -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center">
+                <i class="fas fa-utensils text-red-500 text-2xl mr-2"></i>
+                <h1 class="text-xl font-bold text-gray-800">Gourmet Express</h1>
+            </div>
+            <nav class="hidden md:flex space-x-8">
+                <a href="#" class="text-gray-800 hover:text-red-500 font-medium">Home</a>
+                <a href="#" class="text-gray-800 hover:text-red-500 font-medium">Menu</a>
+                <a href="#" class="text-gray-800 hover:text-red-500 font-medium">About</a>
+                <a href="#" class="text-gray-800 hover:text-red-500 font-medium">Contact</a>
+            </nav>
+            <div class="flex items-center space-x-4">
+                <button id="cart-btn" class="relative">
+                    <i class="fas fa-shopping-cart text-gray-700 text-xl hover:text-red-500"></i>
+                    <span id="cart-count" class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
+                </button>
+                <button class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-full font-medium">Sign In</button>
+                <button class="md:hidden text-gray-700">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-section text-white py-20">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">Delicious Food Delivered To Your Door</h1>
+            <p class="text-xl mb-8 max-w-2xl mx-auto">Order from your favorite restaurants with just a few clicks and enjoy a quick delivery.</p>
+            <div class="flex flex-col md:flex-row justify-center max-w-2xl mx-auto bg-white rounded-lg p-1">
+                <input type="text" placeholder="Enter your delivery address" class="flex-grow px-4 py-3 text-gray-800 focus:outline-none rounded-lg md:rounded-r-none">
+                <button class="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-lg md:rounded-l-none font-medium">Find Food</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories -->
+    <section class="py-12 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-10">Food Categories</h2>
+            <div class="flex overflow-x-auto pb-4 space-x-4 px-2">
+                <button class="category-btn active flex-shrink-0 bg-gray-100 hover:bg-red-500 hover:text-white px-6 py-2 rounded-full font-medium">All</button>
+                <button class="category-btn flex-shrink-0 bg-gray-100 hover:bg-red-500 hover:text-white px-6 py-2 rounded-full font-medium">Pizza</button>
+                <button class="category-btn flex-shrink-0 bg-gray-100 hover:bg-red-500 hover:text-white px-6 py-2 rounded-full font-medium">Burgers</button>
+                <button class="category-btn flex-shrink-0 bg-gray-100 hover:bg-red-500 hover:text-white px-6 py-2 rounded-full font-medium">Sushi</button>
+                <button class="category-btn flex-shrink-0 bg-gray-100 hover:bg-red-500 hover:text-white px-6 py-2 rounded-full font-medium">Pasta</button>
+                <button class="category-btn flex-shrink-0 bg-gray-100 hover:bg-red-500 hover:text-white px-6 py-2 rounded-full font-medium">Salads</button>
+                <button class="category-btn flex-shrink-0 bg-gray-100 hover:bg-red-500 hover:text-white px-6 py-2 rounded-full font-medium">Desserts</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Popular Items -->
+    <section class="py-12 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center mb-10">
+                <h2 class="text-3xl font-bold">Popular Items</h2>
+                <a href="#" class="text-red-500 font-medium hover:underline">View All</a>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                <!-- Food Item 1 -->
+                <div class="food-card bg-white rounded-xl overflow-hidden shadow-md">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=781&q=80" alt="Burger" class="w-full h-48 object-cover">
+                        <div class="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">Popular</div>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex justify-between items-start">
+                            <h3 class="font-bold text-lg mb-1">Classic Burger</h3>
+                            <span class="bg-green-100 text-green-800 text-xs font-medium px-2 py-0.5 rounded">4.5</span>
+                        </div>
+                        <p class="text-gray-600 text-sm mb-3">Juicy beef patty with cheese, lettuce, and special sauce</p>
+                        <div class="flex justify-between items-center">
+                            <span class="font-bold text-gray-900">$8.99</span>
+                            <button class="add-to-cart bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-full text-sm font-medium" data-id="1" data-name="Classic Burger" data-price="8.99">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Food Item 2 -->
+                <div class="food-card bg-white rounded-xl overflow-hidden shadow-md">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Pizza" class="w-full h-48 object-cover">
+                    </div>
+                    <div class="p-4">
+                        <div class="flex justify-between items-start">
+                            <h3 class="font-bold text-lg mb-1">Pepperoni Pizza</h3>
+                            <span class="bg-green-100 text-green-800 text-xs font-medium px-2 py-0.5 rounded">4.7</span>
+                        </div>
+                        <p class="text-gray-600 text-sm mb-3">Classic pizza with mozzarella and pepperoni</p>
+                        <div class="flex justify-between items-center">
+                            <span class="font-bold text-gray-900">$12.99</span>
+                            <button class="add-to-cart bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-full text-sm font-medium" data-id="2" data-name="Pepperoni Pizza" data-price="12.99">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Food Item 3 -->
+                <div class="food-card bg-white rounded-xl overflow-hidden shadow-md">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1559847844-5315695dadae?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1498&q=80" alt="Sushi" class="w-full h-48 object-cover">
+                        <div class="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">New</div>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex justify-between items-start">
+                            <h3 class="font-bold text-lg mb-1">Sushi Combo</h3>
+                            <span class="bg-green-100 text-green-800 text-xs font-medium px-2 py-0.5 rounded">4.8</span>
+                        </div>
+                        <p class="text-gray-600 text-sm mb-3">Assorted sushi with salmon, tuna, and California rolls</p>
+                        <div class="flex justify-between items-center">
+                            <span class="font-bold text-gray-900">$15.99</span>
+                            <button class="add-to-cart bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-full text-sm font-medium" data-id="3" data-name="Sushi Combo" data-price="15.99">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Food Item 4 -->
+                <div class="food-card bg-white rounded-xl overflow-hidden shadow-md">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1473093295043-cdd812d0e601?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Pasta" class="w-full h-48 object-cover">
+                    </div>
+                    <div class="p-4">
+                        <div class="flex justify-between items-start">
+                            <h3 class="font-bold text-lg mb-1">Creamy Pasta</h3>
+                            <span class="bg-green-100 text-green-800 text-xs font-medium px-2 py-0.5 rounded">4.6</span>
+                        </div>
+                        <p class="text-gray-600 text-sm mb-3">Penne pasta with creamy alfredo sauce and mushrooms</p>
+                        <div class="flex justify-between items-center">
+                            <span class="font-bold text-gray-900">$10.99</span>
+                            <button class="add-to-cart bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-full text-sm font-medium" data-id="4" data-name="Creamy Pasta" data-price="10.99">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Special Offers -->
+    <!-- <section class="py-12 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-10">Special Offers</h2>
+            <div class="bg-red-50 rounded-xl p-6 md:p-10 flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-6 md:mb-0 md:pr-8">
+                    <span class="bg-red-100 text-red-800 text-sm font-medium px-3 py-1 rounded-full mb-4 inline-block">Limited Time</span>
+                    <h3 class="text-2xl md:text-3xl font-bold mb-4">Family Combo Deal</h3>
+                    <p class="text-gray-700 mb-6">Get 2 large pizzas, 1 garlic bread, and 2 drinks for only $29.99. Save $10 compared to ordering separately!</p>
+                    <button class="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-lg font-medium">Order Now</button>
+                </div>
+                <div class="md:w-1/2">
+                    <img src="https://images.unsplash.com/photo-1565299507177-b1acccf58f8e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1480&q=80" alt="Special Offer" class="w-full rounded-lg shadow-lg">
+                </div>
+            </div>
+        </div>
+    </section> -->
+
+    <!-- How It Works -->
+    <section class="py-12 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12">How It Works</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="text-center">
+                    <div class="bg-red-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-map-marker-alt text-red-500 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Choose Location</h3>
+                    <p class="text-gray-600">Enter your delivery address to see restaurants that deliver to you.</p>
+                </div>
+                <div class="text-center">
+                    <div class="bg-red-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-utensils text-red-500 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Order Food</h3>
+                    <p class="text-gray-600">Browse menus and add items to your cart from your favorite restaurants.</p>
+                </div>
+                <div class="text-center">
+                    <div class="bg-red-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-truck text-red-500 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Delivery</h3>
+                    <p class="text-gray-600">Track your order in real-time as it makes its way to you.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="py-12 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12">What Our Customers Say</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-gray-50 p-6 rounded-xl">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 rounded-full bg-gray-300 overflow-hidden mr-4">
+                            <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Customer" class="w-full h-full object-cover">
+                        </div>
+                        <div>
+                            <h4 class="font-bold">Sarah Johnson</h4>
+                            <div class="flex text-yellow-400">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-gray-600">"The food arrived hot and delicious. The delivery was faster than expected. Will definitely order again!"</p>
+                </div>
+                <div class="bg-gray-50 p-6 rounded-xl">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 rounded-full bg-gray-300 overflow-hidden mr-4">
+                            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Customer" class="w-full h-full object-cover">
+                        </div>
+                        <div>
+                            <h4 class="font-bold">Michael Chen</h4>
+                            <div class="flex text-yellow-400">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-gray-600">"Great selection of restaurants. The app is easy to use and the customer service is responsive."</p>
+                </div>
+                <div class="bg-gray-50 p-6 rounded-xl">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 rounded-full bg-gray-300 overflow-hidden mr-4">
+                            <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Customer" class="w-full h-full object-cover">
+                        </div>
+                        <div>
+                            <h4 class="font-bold">Emily Rodriguez</h4>
+                            <div class="flex text-yellow-400">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-gray-600">"I love the weekly specials and discounts. The food always arrives fresh and exactly as ordered."</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Download App -->
+    <section class="py-12 bg-red-500 text-white">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-8 md:mb-0">
+                    <h2 class="text-3xl font-bold mb-4">Download Our App</h2>
+                    <p class="text-xl mb-6">Order food even faster with our mobile app. Get exclusive app-only deals and track your orders in real-time.</p>
+                    <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
+                        <button class="bg-black hover:bg-gray-800 text-white px-6 py-3 rounded-lg flex items-center justify-center">
+                            <i class="fab fa-apple text-2xl mr-2"></i>
+                            <div class="text-left">
+                                <div class="text-xs">Download on the</div>
+                                <div class="font-bold">App Store</div>
+                            </div>
+                        </button>
+                        <button class="bg-black hover:bg-gray-800 text-white px-6 py-3 rounded-lg flex items-center justify-center">
+                            <i class="fab fa-google-play text-2xl mr-2"></i>
+                            <div class="text-left">
+                                <div class="text-xs">Get it on</div>
+                                <div class="font-bold">Google Play</div>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+                <div class="md:w-1/2 flex justify-center">
+                    <img src="https://cdn.pixabay.com/photo/2017/01/22/12/07/imac-1999636_1280.png" alt="App Screenshot" class="w-64">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-utensils text-red-500 text-2xl mr-2"></i>
+                        <h3 class="text-xl font-bold">Gourmet Express</h3>
+                    </div>
+                    <p class="text-gray-400 mb-4">Delicious food delivered to your doorstep in minutes.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold mb-4">Company</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white">About Us</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Careers</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Blog</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Press</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold mb-4">Help & Contact</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white">Help Center</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Contact Us</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Privacy Policy</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold mb-4">Subscribe to Newsletter</h4>
+                    <p class="text-gray-400 mb-4">Get updates on special offers and promotions.</p>
+                    <div class="flex">
+                        <input type="email" placeholder="Your email" class="bg-gray-800 text-white px-4 py-2 rounded-l-lg focus:outline-none w-full">
+                        <button class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-r-lg">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2025 Gourmet Express. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Shopping Cart Sidebar -->
+    <div id="cart-sidebar" class="fixed top-0 right-0 h-full w-full md:w-96 bg-white shadow-lg transform translate-x-full transition-transform duration-300 ease-in-out z-50 overflow-y-auto">
+        <div class="p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold">Your Order</h2>
+                <button id="close-cart" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            
+            <div id="cart-items" class="mb-6">
+                <!-- Cart items will be added here dynamically -->
+                <div class="text-center py-10 text-gray-500" id="empty-cart-message">
+                    <i class="fas fa-shopping-cart text-4xl mb-4"></i>
+                    <p>Your cart is empty</p>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-200 pt-4 mb-4">
+                <div class="flex justify-between mb-2">
+                    <span class="font-medium">Subtotal:</span>
+                    <span id="cart-subtotal" class="font-bold">$0.00</span>
+                </div>
+                <div class="flex justify-between mb-2">
+                    <span class="font-medium">Delivery Fee:</span>
+                    <span id="delivery-fee" class="font-bold">$2.99</span>
+                </div>
+                <div class="flex justify-between text-lg font-bold">
+                    <span>Total:</span>
+                    <span id="cart-total">$2.99</span>
+                </div>
+            </div>
+            
+            <button id="checkout-btn" class="w-full bg-red-500 hover:bg-red-600 text-white py-3 rounded-lg font-bold disabled:opacity-50" disabled>
+                Proceed to Checkout
+            </button>
+        </div>
+    </div>
+    <div id="cart-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden"></div>
+
+    <script>
+        // Shopping Cart Functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const cart = [];
+            let subtotal = 0;
+            
+            // DOM Elements
+            const cartBtn = document.getElementById('cart-btn');
+            const closeCartBtn = document.getElementById('close-cart');
+            const cartSidebar = document.getElementById('cart-sidebar');
+            const cartOverlay = document.getElementById('cart-overlay');
+            const cartItemsContainer = document.getElementById('cart-items');
+            const emptyCartMessage = document.getElementById('empty-cart-message');
+            const cartCount = document.getElementById('cart-count');
+            const cartSubtotal = document.getElementById('cart-subtotal');
+            const cartTotal = document.getElementById('cart-total');
+            const checkoutBtn = document.getElementById('checkout-btn');
+            const addToCartButtons = document.querySelectorAll('.add-to-cart');
+            const categoryButtons = document.querySelectorAll('.category-btn');
+            
+            // Toggle Cart Sidebar
+            cartBtn.addEventListener('click', toggleCart);
+            closeCartBtn.addEventListener('click', toggleCart);
+            cartOverlay.addEventListener('click', toggleCart);
+            
+            function toggleCart() {
+                cartSidebar.classList.toggle('translate-x-full');
+                cartOverlay.classList.toggle('hidden');
+                document.body.classList.toggle('overflow-hidden');
+            }
+            
+            // Add to Cart
+            addToCartButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const id = this.getAttribute('data-id');
+                    const name = this.getAttribute('data-name');
+                    const price = parseFloat(this.getAttribute('data-price'));
+                    
+                    // Check if item already exists in cart
+                    const existingItem = cart.find(item => item.id === id);
+                    
+                    if (existingItem) {
+                        existingItem.quantity += 1;
+                    } else {
+                        cart.push({
+                            id,
+                            name,
+                            price,
+                            quantity: 1
+                        });
+                    }
+                    
+                    updateCart();
+                    showAddToCartFeedback(this);
+                });
+            });
+            
+            // Show feedback when item is added to cart
+            function showAddToCartFeedback(button) {
+                const originalText = button.textContent;
+                button.textContent = 'Added!';
+                button.classList.remove('bg-red-500', 'hover:bg-red-600');
+                button.classList.add('bg-green-500', 'hover:bg-green-600');
+                
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.classList.remove('bg-green-500', 'hover:bg-green-600');
+                    button.classList.add('bg-red-500', 'hover:bg-red-600');
+                }, 1000);
+            }
+            
+            // Update Cart UI
+            function updateCart() {
+                // Update cart count
+                const itemCount = cart.reduce((total, item) => total + item.quantity, 0);
+                cartCount.textContent = itemCount;
+                
+                // Update cart items
+                cartItemsContainer.innerHTML = '';
+                
+                if (cart.length === 0) {
+                    emptyCartMessage.classList.remove('hidden');
+                    checkoutBtn.disabled = true;
+                } else {
+                    emptyCartMessage.classList.add('hidden');
+                    checkoutBtn.disabled = false;
+                    
+                    cart.forEach(item => {
+                        const itemElement = document.createElement('div');
+                        itemElement.className = 'cart-item mb-4 pb-4 border-b border-gray-200';
+                        itemElement.innerHTML = `
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="font-medium">${item.name}</h3>
+                                <span class="font-bold">$${(item.price * item.quantity).toFixed(2)}</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <div class="flex items-center border border-gray-300 rounded-full">
+                                    <button class="decrease-quantity px-3 py-1 text-gray-600 hover:bg-gray-100 rounded-l-full" data-id="${item.id}">-</button>
+                                    <span class="quantity px-2">${item.quantity}</span>
+                                    <button class="increase-quantity px-3 py-1 text-gray-600 hover:bg-gray-100 rounded-r-full" data-id="${item.id}">+</button>
+                                </div>
+                                <button class="remove-item text-red-500 hover:text-red-700" data-id="${item.id}">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        `;
+                        cartItemsContainer.appendChild(itemElement);
+                    });
+                    
+                    // Add event listeners to quantity buttons
+                    document.querySelectorAll('.increase-quantity').forEach(button => {
+                        button.addEventListener('click', function() {
+                            const id = this.getAttribute('data-id');
+                            const item = cart.find(item => item.id === id);
+                            if (item) {
+                                item.quantity += 1;
+                                updateCart();
+                            }
+                        });
+                    });
+                    
+                    document.querySelectorAll('.decrease-quantity').forEach(button => {
+                        button.addEventListener('click', function() {
+                            const id = this.getAttribute('data-id');
+                            const item = cart.find(item => item.id === id);
+                            if (item && item.quantity > 1) {
+                                item.quantity -= 1;
+                                updateCart();
+                            }
+                        });
+                    });
+                    
+                    document.querySelectorAll('.remove-item').forEach(button => {
+                        button.addEventListener('click', function() {
+                            const id = this.getAttribute('data-id');
+                            const index = cart.findIndex(item => item.id === id);
+                            if (index !== -1) {
+                                cart.splice(index, 1);
+                                updateCart();
+                            }
+                        });
+                    });
+                }
+                
+                // Update subtotal and total
+                subtotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+                const deliveryFee = subtotal > 0 ? 2.99 : 0;
+                const total = subtotal + deliveryFee;
+                
+                cartSubtotal.textContent = `$${subtotal.toFixed(2)}`;
+                document.getElementById('delivery-fee').textContent = `$${deliveryFee.toFixed(2)}`;
+                cartTotal.textContent = `$${total.toFixed(2)}`;
+            }
+            
+            // Category Filter
+            categoryButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    categoryButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    // In a real app, you would filter the menu items here
+                });
+            });
+            
+            // Checkout Button
+            checkoutBtn.addEventListener('click', function() {
+                alert('Checkout functionality would be implemented here!');
+                // In a real app, this would redirect to a checkout page or show a checkout form
+            });
+        });
+    </script>
+</body>
+</html>
